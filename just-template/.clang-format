@@ -1,0 +1,39 @@
+BasedOnStyle: Chromium
+IndentWidth: 2
+ColumnLimit: 120
+
+# --------------------------------
+# Function call argument formatting
+# --------------------------------
+
+# Never pack arguments together
+BinPackArguments: false
+BinPackParameters: false
+
+# If a call breaks, break immediately after '('
+BreakAfterFunctionCallName: true
+
+# Once multiline, every argument goes on its own line
+AllowAllArgumentsOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
+
+# -------------------------------
+# Initializer lists
+# -------------------------------
+
+
+# Do not keep outer initializer lists on one line
+AllowShortInitializerListsOnASingleLine: false
+
+# -------------------------------
+# Alignment & braces
+# -------------------------------
+
+AlignAfterOpenBracket: DontAlign
+BreakBeforeBraces: Attach
+
+# -------------------------------
+# Comments
+# -------------------------------
+
+ReflowComments: false
