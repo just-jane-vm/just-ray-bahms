@@ -4,6 +4,9 @@
 #include <sw/redis++/redis++.h>
 #include <sw/redis++/redis.h>
 
+#ifndef PAYOUTS
+#define PAYOUTS
+
 class Payouts {
 public:
   Payouts(std::string userID) {
@@ -49,3 +52,5 @@ private:
     }
   }
 };
+
+#endif

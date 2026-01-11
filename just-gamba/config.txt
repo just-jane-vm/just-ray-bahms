@@ -1,0 +1,10 @@
+HELLO,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/0.png,0.1
+WORLD,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/1.png,0.1
+ONE,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/2.png,0.1
+TWO,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/3.png,0.1
+THREE,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/4.png,0.1
+BYE,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/5.png,0.1
+MAGNET,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/6.png,0.1
+PEAR,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/7.png,0.1
+KIWI,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/8.png,0.1
+CHEESE,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/9.png,0.1
