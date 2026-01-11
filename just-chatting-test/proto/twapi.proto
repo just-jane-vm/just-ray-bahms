@@ -1,0 +1,188 @@
+syntax = "proto3";
+
+package twapi;
+
+option go_package = "./twapi";
+
+service TwitchEvents {
+  rpc SubscribeChats  (SubscribeChatRequest) returns (stream TwitchChat);
+  rpc SubscribeRedeems (SubscribeRedeemRequest) returns (stream TwitchRedeemEvent);
+  rpc SendChat (ChatMessage) returns (VoidMessage);
+  rpc SubscribeChatScores (SubscribeChatScoreRequest) returns (stream ScoredTwitchChat);
+  rpc SubscribeRaids (SubscribeRaidEvent) returns (stream RaidEvent);
+  rpc SubscribeShoutouts (SubscribeShoutoutEvent) returns (stream ShoutoutEvent);
+
+  rpc SubscribeGigaEmotes (SubscribeGigaEmoteRequest) returns (stream GigaEmoteResponse);
+
+  rpc GetUserFromUserName (JustUserName) returns (TwapiUser);
+  rpc GetUserFromID (JustUserID) returns (TwapiUser);
+  rpc TimeoutUser (TimeoutUserRequest) returns (VoidMessage);
+
+  rpc CreateCustomReward (TwitchCustomReward) returns (ResultStatus);
+  rpc GetCustomReward (ObjectId) returns (TwitchCustomReward);
+  rpc UpdateCustomReward (TwitchCustomReward) returns (ResultStatus);
+  rpc DeleteCustomReward (ObjectId) returns (ResultStatus);
+
+  rpc UpdateRewardRedemptionStatus (TwitchRewardRedemptionStatusUpdate) returns (VoidMessage);
+}
+
+message ShoutoutEvent {
+  string display_name = 1;
+  string twitch_id = 2;
+}
+
+message SubscribeShoutoutEvent {
+  string void = 1;
+}
+
+message SubscribeRaidEvent {
+  string void = 1;
+}
+
+message RaidEvent {
+  string broadcaster_id = 1;
+  string broadcaster_name = 2;
+  int32 raiders_count = 3;
+}
+
+message GigaEmoteResponse {
+  string user_id = 1;
+  string emote_id = 2;
+  string chat_message = 3;
+}
+
+message SubscribeGigaEmoteRequest {
+  repeated string emote_ids = 1;
+}
+
+message SubscribeChatScoreRequest {
+  string request_id = 1;
+}
+
+message ScoredTwitchChat {
+  int32 score = 1;
+  TwitchChat chat = 2;
+}
+
+message ObjectId {
+  string id = 1;
+}
+
+message JustUserName {
+    string user_name = 1;
+}
+
+message JustUserID {
+    string user_id = 1;
+}
+
+message TwitchCustomReward {
+  string id = 1;
+
+  string broadcaster_name = 2;
+  string broadcaster_login = 3;
+  string broadcaster_id = 4;
+
+  string image = 5;
+  string background_color = 6;
+
+  int32 cost = 7;
+  string title = 8;
+  string prompt = 9;
+  bool is_user_input_required = 10;
+  int32 max_per_stream = 11;
+  int32 max_per_user_per_stream = 12;
+
+  string global_cooldown = 13;
+  bool is_enabled = 14;
+  bool is_paused = 15;
+
+  bool skip_queue = 16;
+}
+
+enum Status {
+  UNSET = 0;
+  OK = 1;
+  ERROR = 2;
+}
+
+enum RewardStatus {
+    REWARD_STATUS_UNSET = 0;
+    REWARD_STATUS_CANCELLED = 1;
+    REWARD_STATUS_FULFILLED = 2;
+}
+
+message ResultStatus {
+  Status status = 1;
+  string msg = 2;
+}
+
+message VoidMessage {
+  string void = 1;
+}
+
+message ChatMessage {
+  string msg = 1;
+}
+
+message SubscribeChatRequest {
+  string command = 1;
+  string user_id = 2;
+}
+
+message TwitchChat {
+  string msg_content = 1;
+  string user_id = 2;
+  string user_display_name = 3;
+  string user_color = 4;
+  int32 message_bits = 5;
+  string raw_message = 6;
+  repeated string emotes = 7;
+}
+
+message SubscribeRedeemRequest {
+  repeated string redeem_id = 1;
+
+  // a flag to set in order for updates to redeems e.g. fulfilled/cancelled
+  // to be sent in addition to the unfulfilled
+  bool include_updates = 2;
+}
+
+message TwitchRedeemEvent {
+  // This is the id of the user event, the id of their redemption of the reward
+  string redeem_id = 1;
+
+  string user_id = 2;
+
+  // This is the id of the reward, i.e. hyrdrate i know, its stupid, these are called
+  // redeems in stream manager. Twitch needs to get their act together, so help me god.
+  string reward_id = 3;
+
+  string user_input = 4;
+  string status = 5;
+}
+
+message TwitchRewardRedemptionStatusUpdate {
+  // This is the id of the user event, the id of their redemption of the reward
+  string redeem_id = 1;
+
+  // This is the id of the reward, i.e. hyrdrate i know, its stupid, these are called
+  // redeems in stream manager. Twitch needs to get their act together, so help me god.
+  string reward_id = 2;
+
+  RewardStatus status = 3;
+}
+
+message TwapiUser {
+  string user_id = 1;
+  string user_name = 2;
+  string chat_color = 3;
+  string profile_picture_url = 4;
+}
+
+message TimeoutUserRequest {
+  string user_id = 1;
+  int32 timeout = 2;
+  string reason = 3;
+}
+

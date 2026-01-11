@@ -7,6 +7,7 @@
 #ifndef WHEEL
 #define WHEEL
 
+// just__jane is cute, mhm, pass it on - JanMarten_Jongerius
 class Wheel {
 public:
   Config _winner;
