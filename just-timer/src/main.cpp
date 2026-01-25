@@ -46,10 +46,7 @@ int main(int argc, char **argv) {
 
   Font font = LoadFontEx(fontPath.c_str(), 128, NULL, 0);
 
-  Vector2 textSize = MeasureTextEx(GetFontDefault(), "00:00.000", 128, 0.0);
-  std::cout << textSize.x << " " << textSize.y << std::endl;
-
-  if (argc != 2) {
+  if (argc < 2) {
     std::cout << "missing required argument" << std::endl;
     return 1;
   }
@@ -58,6 +55,33 @@ int main(int argc, char **argv) {
   if (num <= 0) {
     std::cerr << "provided value is not a number: " << num << std::endl;
   }
+
+  std::string note;
+  std::string view = "00:00.000";
+
+  Vector2 textSize = MeasureTextEx(GetFontDefault(), view.c_str(), 96, 0.0);
+  int width = textSize.x;
+  int height = textSize.y;
+  float offset = height;
+
+  if (argc >= 3) {
+    std::stringstream ss;
+    for (int i = 2; i < argc; ++i) {
+      ss << argv[i];
+      if (i < argc - 1) {
+        ss << " ";
+      }
+    }
+
+    note = ss.str();
+    view += "\n";
+    view += note;
+    Vector2 textSize = MeasureTextEx(GetFontDefault(), view.c_str(), 48, 0.0);
+    width = std::max((int)textSize.x, width);
+    height += textSize.y;
+  }
+
+  SetWindowSize(width, height);
 
   num = num * 1000;
   bool isFinished = false;
@@ -73,8 +97,13 @@ int main(int argc, char **argv) {
       UpdateMusicStream(music);
     } else {
       num = std::max(0, num - milliseconds);
-      DrawTextEx(font, formatMilliseconds(num).c_str(),
-                 Vector2{.x = 0.0f, .y = 0.0f}, 128, 2.0, deadff);
+      std::string text = formatMilliseconds(num);
+
+      DrawTextEx(font, text.c_str(), Vector2{.x = 0.0f, .y = 0.0f}, 96, 2.0,
+                 deadff);
+
+      DrawTextEx(font, note.c_str(), Vector2{.x = 0.0f, .y = offset}, 48, 2.0,
+                 deadff);
     }
 
     if (!isFinished && num <= 0) {
