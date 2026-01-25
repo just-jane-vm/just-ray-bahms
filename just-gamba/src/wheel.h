@@ -94,4 +94,6 @@ private:
   bool _hasSignaledEnd;
 };
 
+std::string GetWinner(std::vector<Wheel *> wheels);
+
 #endif

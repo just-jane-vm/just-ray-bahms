@@ -1,10 +1,10 @@
 #include "config_parser.hpp"
-#include "payouts.h"
 #include "raylib.h"
 #include "rngesus.h"
 #include "wheel.h"
 
 #include <cstdlib>
+#include <iostream>
 #include <string>
 #include <sw/redis++/redis.h>
 #include <unordered_set>
@@ -14,17 +14,12 @@
 #define WINDOW_HEIGHT 216.0
 #define WINDOW_WIDTH 384.0
 
-int main(int argc, char **argv) {
-  if (argc != 2) {
-    return 1;
-  }
-
-  std::string userID = argv[1];
-  Payouts payoutThing = Payouts(userID);
-
+int main() {
   SetConfigFlags(FLAG_WINDOW_TRANSPARENT | FLAG_WINDOW_ALWAYS_RUN);
   InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "just-gamba");
   SetTargetFPS(60);
+
+  InitAudioDevice();
 
   Texture2D slotMachine = LoadTexture("/home/jane/just-stream/just-ray-bahms/"
                                       "just-gamba/slot_machine.png");
@@ -40,6 +35,29 @@ int main(int argc, char **argv) {
   wheels.push_back(new Wheel(Shuffle(things), 160, 90));
   wheels.push_back(new Wheel(Shuffle(things), 256, 90));
 
+  std::unordered_set<std::string> results;
+
+  for (Wheel *wheel : wheels) {
+    results.insert(wheel->_winner.label);
+  }
+
+  bool playMusic = false;
+  if (results.size() < 3) {
+    playMusic = true;
+  }
+
+  Music music;
+
+  std::string thing = std::to_string(RNG(1, 3));
+  std::string path = "/home/jane/just-stream/just-ray-bahms/"
+                     "just-gamba/assets/audio/music_" +
+                     thing + ".mp3";
+
+  music = LoadMusicStream(path.c_str());
+
+  PlayMusicStream(music);
+  SetMusicVolume(music, 1.0);
+
   int endFrame = 180;
   bool isEnded = false;
 
@@ -47,6 +65,10 @@ int main(int argc, char **argv) {
 
   MinimizeWindow();
   while (!WindowShouldClose()) {
+    if (playMusic) {
+      UpdateMusicStream(music);
+    }
+
     count -= 1;
     BeginDrawing();
     ClearBackground(WHITE);
@@ -67,23 +89,16 @@ int main(int argc, char **argv) {
 
     if (!shouldContinue && !isEnded) {
       isEnded = true;
-      std::unordered_set<std::string> results;
-      results.insert(wheels[0]->Current());
-      results.insert(wheels[1]->Current());
-      results.insert(wheels[2]->Current());
 
       std::cout << "--result" << " " << wheels[0]->Current() << "|"
                 << wheels[1]->Current() << "|" << wheels[2]->Current()
                 << std::endl;
 
-      if (results.size() == 2) {
-        payoutThing.GiveTTSTokens(3);
-        message = "you win 3 tokens!!! yippie";
-      } else if (results.size() == 1) {
-        payoutThing.GiveTTSTokens(5);
-        message = "you win 5 tokens!!!!! yippie";
-      } else {
+      std::string winner = GetWinner(wheels);
+      if (winner.empty()) {
         message = "you lose, skill issue";
+      } else {
+        message = "you won " + winner;
       }
     }
 
