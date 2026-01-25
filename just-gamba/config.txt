@@ -1,10 +1,11 @@
-HELLO,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/0.png,0.1
-WORLD,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/1.png,0.1
-ONE,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/2.png,0.1
-TWO,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/3.png,0.1
-THREE,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/4.png,0.1
-BYE,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/5.png,0.1
-MAGNET,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/6.png,0.1
-PEAR,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/7.png,0.1
-KIWI,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/8.png,0.1
-CHEESE,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/9.png,0.1
+YUZU,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/final/yuzu.png,1,one shame token, three shame tokens
+BOY_KISSER,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/final/boykisser.png,2,2 giga vip,5 giga vip
+SEVEN,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/final/seven.png,2,2 giga vip,5 giga vip
+GOODBOY,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/final/goodboy.png,3,2 giga vip,5 giga vip
+GIGA_CAPY,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/final/giga-capy.png,3,2 giga vip,5 giga vip
+ASRAEL,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/final/asrael.png,5,2 giga vip,5 giga vip
+TOAST,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/final/toast.png,5,2 giga vip,5 giga vip
+AXE,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/final/axe.png,5,2 giga vip,5 giga vip
+CHERRY,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/final/cherry.png,5,2 giga vip,5 giga vip
+BLOB,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/final/blob.png,10,2 giga vip,5 giga vip
+ABTAR,/home/jane/just-stream/just-ray-bahms/just-gamba/assets/final/abtar.png,10,2 giga vip,5 giga vip
