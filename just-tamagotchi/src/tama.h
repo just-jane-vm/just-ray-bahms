@@ -8,6 +8,7 @@
 
 class Tama {
 public:
+  int headpat = 0;
   std::string name;
   TamaState *currentState;
 
@@ -48,6 +49,11 @@ public:
   void Draw() { currentState->Draw(); }
 
   void Transition(State nextState) {
+    if (headpat > 0) {
+      headpat -= 1;
+      nextState = HEADPAT;
+    }
+
     currentState->ExitState();
     switch (nextState) {
     case UNSET:

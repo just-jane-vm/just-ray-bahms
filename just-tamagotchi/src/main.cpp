@@ -3,47 +3,55 @@
 #include "cookie.h"
 #include "tama.h"
 
+#include <chrono>
+#include <cstdlib>
+#include <iostream>
+#include <string>
+#include <sw/redis++/redis++.h>
+#include <thread>
+
+using namespace sw::redis;
+
 #define TRANSPARENT CLITERAL(Color){0x00, 0x00, 0x00, 0x00}
 
 #define WINDOW_HEIGHT 250.0
 #define WINDOW_WIDTH 180.0
 
-#include <condition_variable>
-#include <hiredis/hiredis.h> // Example using hiredis
-#include <mutex>
-#include <queue>
-#include <thread>
+void headpat_listener(int *headpat_counter) {
+  try {
+    char *uri = std::getenv("REDIS_CONNECTION_STRING");
+    sw::redis::Redis redis(uri);
+    auto sub = redis.subscriber();
 
-std::queue<std::string> eventQueue;
-std::mutex mtx;
-std::condition_variable cv;
-bool running = true;
+    sub.on_message([](std::string channel, std::string msg) {});
 
-// 1. Worker Thread Function
-void redisSubscriberThread() {
-  redisContext *c = redisConnect("127.0.0.1", 6379);
-  redisReply *reply = (redisReply *)redisCommand(c, "SUBSCRIBE mychannel");
-  freeReplyObject(reply);
+    sub.subscribe("juniper/redeems/headpat");
 
-  while (running) {
-    if (redisGetReply(c, (void **)&reply) == REDIS_OK) {
-      // Check if message, push to queue
-      if (reply->type == REDIS_REPLY_ARRAY && reply->elements == 3) {
-        std::string msg = reply->element[2]->str;
-        {
-          std::lock_guard<std::mutex> lock(mtx);
-          eventQueue.push(msg); // 2. Push Event
+    bool wtf = false;
+    while (true) {
+      try {
+        sub.consume();
+        if (!wtf) {
+          wtf = true;
+          continue;
         }
-        cv.notify_one(); // 3. Notify Main Thread
+
+        *headpat_counter += 1;
+
+      } catch (const Error &err) {
+        std::cerr << "Error in subscriber consume loop: " << err.what()
+                  << std::endl;
+        // Handle exceptions, possibly with a reconnection strategy
+        std::this_thread::sleep_for(std::chrono::seconds(1));
       }
-      freeReplyObject(reply);
     }
+  } catch (const Error &err) {
+    std::cerr << "Redis connection error in subscriber thread: " << err.what()
+              << std::endl;
   }
-  redisFree(c);
 }
 
 int main() {
-  std::thread subThread(redisSubscriberThread);
   Color screen = {200, 200, 200, 128};
   SetConfigFlags(FLAG_WINDOW_TRANSPARENT | FLAG_WINDOW_ALWAYS_RUN);
   InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "just-tamagotchi");
@@ -64,6 +72,11 @@ int main() {
   Lightning bolt = Lightning(gameZone);
 
   int count = 0;
+
+  int blah;
+  std::thread sub_thread(headpat_listener, &tama.headpat);
+  std::this_thread::sleep_for(std::chrono::seconds(1));
+
   while (!WindowShouldClose()) {
     count += 1;
     tama.Update();
@@ -82,5 +95,10 @@ int main() {
   }
 
   CloseWindow();
+
+  if (sub_thread.joinable()) {
+    sub_thread.join();
+  }
+
   return 0;
 }

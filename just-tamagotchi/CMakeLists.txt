@@ -17,6 +17,7 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(raylib)
+find_package(redis++ REQUIRED)
 
 # Our Project
 add_executable(${PROJECT_NAME})
@@ -42,6 +43,7 @@ endif()
 
 #set(raylib_VERBOSE 1)
 target_link_libraries(${PROJECT_NAME} raylib)
+target_link_libraries(${PROJECT_NAME} redis++::redis++)
 
 # Web Configurations
 if ("${PLATFORM}" STREQUAL "Web")

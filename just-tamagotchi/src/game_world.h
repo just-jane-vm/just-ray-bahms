@@ -16,6 +16,8 @@ public:
     _currentPosition = randomStart;
     _corner = Vector2{.x = window.x, .y = window.y};
 
+    // these textures are in face true name brand 2d but not that store brand
+    // kind - toppocatto
     Image image = GenImageColor(window.width, window.height, BLANK);
     _bolt = LoadTextureFromImage(image);
     right = Flip(0.5);
@@ -69,6 +71,7 @@ public:
 
     Image img = LoadImage(path.c_str());
 
+    // 67 - Mr_Autio
     for (int x = 0; x < img.width; x += 8.0f) {
       Rectangle frame =
           Rectangle{.x = (float)x, .y = 0, .width = 8.0f, .height = 24};
