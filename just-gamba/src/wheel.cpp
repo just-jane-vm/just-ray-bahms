@@ -12,8 +12,6 @@ std::string GetWinner(std::vector<Wheel *> wheels) {
     return wheels[0]->_winner.win3;
   }
 
-  std::cout << wheels.size() << std::endl;
-
   if (wheels[0]->_winner.label == wheels[1]->_winner.label) {
     return wheels[0]->_winner.win2;
   }
@@ -22,7 +20,7 @@ std::string GetWinner(std::vector<Wheel *> wheels) {
     return wheels[1]->_winner.win2;
   }
 
-  if (wheels[1]->_winner.label == wheels[2]->_winner.label) {
+  if (wheels[0]->_winner.label == wheels[2]->_winner.label) {
     return wheels[0]->_winner.win2;
   }
 
